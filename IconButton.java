@@ -2,9 +2,12 @@ package dependencies.material_components;
 
 import dependencies.material_components.utils.RippleSkinFactory;
 import dependencies.material_components.utils.SVGFactory;
+import javafx.event.ActionEvent;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Skin;
 import javafx.scene.control.SkinBase;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.SVGPath;
 
@@ -24,6 +27,12 @@ public class IconButton extends ButtonBase {
         setPrefSize(SIZE, SIZE);
         setMinSize(SIZE, SIZE);
         setMaxSize(SIZE, SIZE);
+
+        addEventFilter(MouseEvent.MOUSE_CLICKED,(MouseEvent evt)->{
+            if(onActionProperty().get()!=null && evt.getButton().equals(MouseButton.PRIMARY)){
+                onActionProperty().get().handle(new ActionEvent(this,null));
+            }
+        });
     }
 
     @Override
