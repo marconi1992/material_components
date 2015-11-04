@@ -19,6 +19,13 @@ import java.io.IOException;
 public class SVGFactory {
 
     static public SVGPath createSVG(File file) {
+        SVGPath svg = new SVGPath();
+        svg.getStyleClass().add("icon-svg");
+        svg.setContent(getSVGContent(file));
+        return svg;
+    }
+
+    static public String getSVGContent(File file){
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         String pathStr = "";
         try {
@@ -44,10 +51,6 @@ public class SVGFactory {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        SVGPath svg = new SVGPath();
-        svg.getStyleClass().add("icon-svg");
-        svg.setContent(pathStr);
-        return svg;
+        return  pathStr;
     }
 }
