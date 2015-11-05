@@ -25,41 +25,43 @@ public class RecyclerView<S> extends ListView<S> {
     }
 
 
-    static abstract public class Adapter<T> implements Callback<ListView,ListCell>{
+    static abstract public class Adapter<T> implements Callback<ListView,ViewRow>{
 
         @Override
-        public ListCell call(ListView param) {
-            return new ListCell(){
-                {
-                    getStyleClass().clear();
-                    setMinWidth(USE_PREF_SIZE);
-                    setPrefWidth(0);
-                }
-                private T holder;
-                @Override
-                protected void updateItem(Object item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if(!empty){
-                        if(holder==null){
-                            holder=onCreateViewHolder(new FXMLLoader());
-                        }
-                        if(holder instanceof ViewHolder){
-                            onBindViewHolder(holder,item);
-                            setGraphic(((ViewHolder)holder).view);
-                        }
-                    }else{
-                        setText(null);
-                        setGraphic(null);
-                    }
-                }
-            };
+        public ViewRow call(ListView param) {
+            return new ViewRow<T>(this);
         }
 
         public abstract T onCreateViewHolder(FXMLLoader loader);
         public abstract void onBindViewHolder(T holder,Object item);
 
     }
-
+    static  public class ViewRow<T> extends ListCell{
+        private T holder;
+        private Adapter<T> adapter;
+        public ViewRow(Adapter<T> adapter){
+            this.adapter=adapter;
+            getStyleClass().clear();
+            setMinWidth(USE_PREF_SIZE);
+            setPrefWidth(0);
+        }
+        @Override
+        protected void updateItem(Object item, boolean empty) {
+            super.updateItem(item, empty);
+            if(!empty){
+                if(holder==null){
+                    holder=adapter.onCreateViewHolder(new FXMLLoader());
+                }
+                if(holder instanceof ViewHolder){
+                    adapter.onBindViewHolder(holder, item);
+                    setGraphic(((ViewHolder)holder).view);
+                }
+            }else{
+                setText(null);
+                setGraphic(null);
+            }
+        }
+    }
     static abstract public class ViewHolder{
 
         protected Node view;
@@ -71,6 +73,10 @@ public class RecyclerView<S> extends ListView<S> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        public Node getView() {
+            return view;
         }
     }
 }

@@ -66,6 +66,7 @@ public class DrawerLayout extends AnchorPane {
                 AnchorPane.setLeftAnchor(content, DEFAULT_WIDTH_NAV);
                 nav.setTranslateX(0);
                 toggleLayer.setVisible(false);
+                drawerOpened=false;
             }
         }
     }

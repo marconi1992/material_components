@@ -20,10 +20,11 @@ public class Toolbar extends VBox implements ActionBar{
     public Toolbar(){
         getStyleClass().add("toolbar");
         setAlignment(Pos.CENTER_LEFT);
-        setPrefHeight(64);
-
+        topPlace.setMinHeight(64);
         topPlace.setAlignment(Pos.CENTER_LEFT);
         topPlace.getChildren().add(title);
+        topPlace.getStyleClass().add("top-place");
+        title.getStyleClass().add("title");
 
         home.setIcon(getClass().getResource("utils/icons/menu.svg").toString());
         home.setIconBackground(getClass().getResource("utils/icons/arrow_back.svg").toString());
