@@ -90,15 +90,5 @@ public class IconButton extends ButtonBase {
         return icon;
     }
 
-    public static class IconButtonSkin extends SkinBase {
-        private final StackPane icon = new StackPane();
 
-        public IconButtonSkin(IconButton button) {
-            super(button);
-        }
-
-        public void setIcon(SVGPath icon) {
-            getChildren().add(icon);
-        }
-    }
 }
