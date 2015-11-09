@@ -60,7 +60,7 @@ public class TextInputLayout extends StackPane implements ChangeListener<Boolean
                     if (c.getList().get(0) instanceof TextInputControl) {
                         placeTextInput((TextInputControl) c.getList().get(0));
                     }
-                }else if(c.getList().size()>1){
+                } else if (c.getList().size() > 1) {
                     getChildrenUnmodifiable().removeListener(this);
                 }
             }
@@ -86,27 +86,29 @@ public class TextInputLayout extends StackPane implements ChangeListener<Boolean
         return this.floatedLabel;
     }
 
-    private void floatedConf(){
-        if(floatedLabel){
+    private void floatedConf() {
+        if (floatedLabel) {
             this.getChildren().add(label);
             label.setText(input.getPromptText());
             input.setPromptText("");
             input.textProperty().addListener((observable, oldValue, newValue) -> {
-                if(oldValue.isEmpty() && newValue.length()>0){
-                    label.setTranslateY(-12);
-                    labelScale.setX(0.75);
-                    labelScale.setY(0.75);
-                }else if(oldValue.length()>0 && newValue.isEmpty() && !input.isFocused()){
-                    label.setTranslateY(12);
-                    labelScale.setX(1);
-                    labelScale.setY(1);
-                }
+                if (newValue != null && oldValue!=null)
+                    if (oldValue.isEmpty() && newValue.length() > 0) {
+                        label.setTranslateY(-12);
+                        labelScale.setX(0.75);
+                        labelScale.setY(0.75);
+                    } else if (oldValue.length() > 0 && newValue.isEmpty() && !input.isFocused()) {
+                        label.setTranslateY(12);
+                        labelScale.setX(1);
+                        labelScale.setY(1);
+                    }
             });
-        }else{
+        } else {
             this.getChildren().remove(label);
             input.setPromptText(label.getText());
         }
     }
+
     private void animate() {
 
         input.pseudoClassStateChanged(NOT_ANIMATED, !animated);
@@ -151,11 +153,11 @@ public class TextInputLayout extends StackPane implements ChangeListener<Boolean
             timeline = getNotFloatedAnimation(newValue);
         }
         timeline.setOnFinished(evt ->
-             {
+                {
                     bar.setVisible(false);
                     this.pseudoClassStateChanged(BAR_PLACED, newValue);
                     label.setTextFill(newValue ? bar.getStroke() : Color.BLACK);
-             }
+                }
 
         );
 
@@ -181,9 +183,9 @@ public class TextInputLayout extends StackPane implements ChangeListener<Boolean
             timeline = new Timeline(
                     new KeyFrame(ANIM_DURATION,
                             new KeyValue(bar.endXProperty(), 0),
-                            new KeyValue(labelScale.xProperty(),input.getText().isEmpty()?1:0.75),
-                            new KeyValue(labelScale.yProperty(),input.getText().isEmpty()?1:0.75),
-                            new KeyValue(label.translateYProperty(),input.getText().isEmpty()?12:-12)
+                            new KeyValue(labelScale.xProperty(), input.getText() == null || input.getText().isEmpty() ? 1 : 0.75),
+                            new KeyValue(labelScale.yProperty(), input.getText() == null || input.getText().isEmpty() ? 1 : 0.75),
+                            new KeyValue(label.translateYProperty(),input.getText() == null || input.getText().isEmpty() ? 12 : -12)
                     )
             );
 

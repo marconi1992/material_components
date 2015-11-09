@@ -5,6 +5,8 @@ import dependencies.material_components.utils.RippleSkinFactory;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Button;
 import javafx.scene.control.Skin;
 import javafx.scene.control.SkinBase;
@@ -36,6 +38,7 @@ public class SlidingTabLayout extends VBox {
 
     public void setViewPager(ViewPager viewPager) {
         this.viewPager = viewPager;
+        viewPager.setOnPageChangeListener(new PagerListener());
         populateStrip();
     }
 
@@ -48,7 +51,6 @@ public class SlidingTabLayout extends VBox {
             tab.setOnAction(evt->{
                 Tab tabPressed= (Tab) evt.getSource();
                 viewPager.setCurrentItem(tabStrip.getChildren().indexOf(tabPressed));
-                animatingBar(tabPressed.getWidth(), getPadding().getLeft() + tabPressed.getLayoutX());
             });
             tabStrip.getChildren().add(tab);
         }
@@ -72,5 +74,26 @@ public class SlidingTabLayout extends VBox {
             return super.createDefaultSkin();
         }
 
+    }
+
+    private class PagerListener implements ViewPager.OnPageChangeListener{
+
+        @Override
+        public void onPageSelected(int position) {
+            Tab tab = (Tab) tabStrip.getChildren().get(position);
+            if(tab.getWidth()>0) {
+                animatingBar(tab.getWidth(), getPadding().getLeft() + tab.getLayoutX());
+            }else{
+                tab.widthProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        if(newValue.intValue()>0){
+                            animatingBar(tab.getWidth(), getPadding().getLeft() + tab.getLayoutX());
+                            tab.widthProperty().removeListener(this);
+                        }
+                    }
+                });
+            }
+        }
     }
 }
