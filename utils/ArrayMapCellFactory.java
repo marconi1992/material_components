@@ -1,8 +1,10 @@
 package dependencies.material_components.utils;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 import java.util.ArrayList;

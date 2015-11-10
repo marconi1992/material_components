@@ -31,7 +31,6 @@ class EditingTableCell<S,T> extends RippleTableCell<S, T> {
     @Override
     public void cancelEdit() {
         super.cancelEdit();
-
         setText((String) getItem());
         setGraphic(null);
     }
@@ -60,7 +59,6 @@ class EditingTableCell<S,T> extends RippleTableCell<S, T> {
             textField = new TextField();
         }
         textField.setText((String) item);
-        textField.selectAll();
         textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
             @Override

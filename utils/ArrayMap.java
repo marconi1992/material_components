@@ -41,14 +41,29 @@ public class ArrayMap {
     }
 
     public String get(String key) {
+        int index;
+        if((index=indexOf(key))!=-1){
+            return data[(index*2)+1];
+        }
+        return null;
+    }
+
+    public int indexOf(String key){
         for (int i = 0; i < hash.length; i++) {
             if (hash[i] == key.hashCode()) {
                 if (data[i * 2].equals(key)) {
-                    return data[(i * 2) + 1];
+                    return i;
                 }
             }
         }
-        return null;
+        return -1;
+    }
+
+    public void replace(String key,String value){
+        int index;
+        if((index=indexOf(key))!=-1){
+            data[(index*2)+1]=value;
+        }
     }
 
 
