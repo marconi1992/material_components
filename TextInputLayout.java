@@ -46,7 +46,7 @@ public class TextInputLayout extends StackPane implements ChangeListener<Boolean
         label.getTransforms().add(labelScale);
         label.setMouseTransparent(true);
         StackPane.setAlignment(label, Pos.TOP_LEFT);
-        label.setTranslateY(12);
+        label.setTranslateY(10);
 
         getStyleClass().add("paper-input");
         setPrefWidth(150);
@@ -91,18 +91,28 @@ public class TextInputLayout extends StackPane implements ChangeListener<Boolean
             this.getChildren().add(label);
             label.setText(input.getPromptText());
             input.setPromptText("");
-            input.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null && oldValue!=null)
-                    if (oldValue.isEmpty() && newValue.length() > 0) {
-                        label.setTranslateY(-12);
-                        labelScale.setX(0.75);
-                        labelScale.setY(0.75);
-                    } else if (oldValue.length() > 0 && newValue.isEmpty() && !input.isFocused()) {
-                        label.setTranslateY(12);
-                        labelScale.setX(1);
-                        labelScale.setY(1);
+            input.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    if (newValue != null) {
+                        if (newValue.length() > 0) {
+                            label.setTranslateY(-12);
+                            labelScale.setX(0.75);
+                            labelScale.setY(0.75);
+                            input.textProperty().removeListener(this);
+                        }
                     }
+                }
             });
+            if (input.getText().length() > 0) {
+                label.setTranslateY(-12);
+                labelScale.setX(0.75);
+                labelScale.setY(0.75);
+            } else if (input.getText().isEmpty() && !input.isFocused()) {
+                label.setTranslateY(12);
+                labelScale.setX(1);
+                labelScale.setY(1);
+            }
         } else {
             this.getChildren().remove(label);
             input.setPromptText(label.getText());
