@@ -35,7 +35,7 @@ public class JSONUtils {
             String key = keysItr.next();
             Object valueObject = object.get(key);
             String value = (valueObject instanceof String ? (String) valueObject : String.valueOf(valueObject));
-            arrayMap.put(key, value);
+            arrayMap.put(key,value.equalsIgnoreCase("null")?"":value);
         }
         return arrayMap;
     }
