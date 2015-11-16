@@ -25,7 +25,12 @@ public class FixContextTableRow<S> implements Callback<TableView<S>,TableRow<S>>
         if(contextMenu.getItems().size()==0) {
             contextMenu.getItems().addAll(contextItems);
         }
-        tableRow.contextMenuProperty().bind(Bindings.when(tableRow.itemProperty().isNotNull()).then(contextMenu).otherwise((ContextMenu)null));
+
+        tableRow.setOnContextMenuRequested(evt->{
+            if(contextMenu!=null){
+                contextMenu.show(tableRow,evt.getScreenX(), evt.getScreenY());
+            }
+        });
         return tableRow;
     }
 
