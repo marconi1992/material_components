@@ -20,15 +20,16 @@ public class ArrayMapCellFactory implements Callback<TableColumn.CellDataFeature
     @Override
     public ObservableValue<?> call(TableColumn.CellDataFeatures<ArrayMap, ?> param) {
         String value = "";
+        String patternTemp=pattern;
         if (keys.size() == 0) {
             value = param.getValue().get(this.key);
 
         } else {
-            if (pattern != null) {
+            if (patternTemp != null) {
                 for (String key : keys) {
-                    pattern = pattern.replaceFirst("\\?", param.getValue().get(key));
+                    patternTemp = patternTemp.replaceFirst("\\?", param.getValue().get(key));
                 }
-                value = pattern;
+                value = patternTemp;
             } else {
                 for (int i = 0; i < keys.size(); i++) {
                     value += param.getValue().get(keys.get(i)) + (i == keys.size() - 1 ? "" : " ");

@@ -1,6 +1,7 @@
 package dependencies.material_components.utils;
 
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
 
 
@@ -9,6 +10,7 @@ import javafx.scene.control.*;
  */
 public class CheckBoxTableCell<S> extends TableCell<S, String> {
     private CheckBox checkBox;
+    private boolean update=false;
 
     @Override
     protected void updateItem(String item, boolean empty) {
@@ -17,9 +19,11 @@ public class CheckBoxTableCell<S> extends TableCell<S, String> {
             if (checkBox == null) {
                 this.getStyleClass().add("check-box-table-cell");
                 checkBox = new CheckBox();
+                createCheckBox();
             }
+            update=true;
             checkBox.setSelected(Boolean.valueOf(item));
-            createCheckBox();
+            update=false;
             setGraphic(checkBox);
             setText(null);
         } else {
@@ -42,7 +46,9 @@ public class CheckBoxTableCell<S> extends TableCell<S, String> {
                         newValue
                 );
                 TableColumn column = getTableColumn();
-                Event.fireEvent(column, editEvent);
+                if(!update && column.getOnEditCommit()!=null) {
+                    Event.fireEvent(column, editEvent);
+                }
             }
         });
     }

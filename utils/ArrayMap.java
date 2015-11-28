@@ -1,5 +1,8 @@
 package dependencies.material_components.utils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ArrayMap {
     int size = 0;
     private int[] hash = new int[1];
@@ -66,5 +69,13 @@ public class ArrayMap {
         }
     }
 
+    public static ArrayMap getArray(String data){
+        try {
+            return JSONUtils.toArrayMap(new JSONObject(data));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

@@ -58,8 +58,9 @@ public class MaterialRadioButton<S> extends RadioButton {
             }
             getChildren().add(ripple);
             ripple.setRadius(24);
-            ripple.centerXProperty().bind(radio.widthProperty().divide(2));
-            ripple.centerYProperty().bind(radio.heightProperty().divide(2));
+            ripple.setOpacity(0);
+            ripple.centerXProperty().bind(radio.layoutXProperty().add(radio.widthProperty().divide(2)));
+            ripple.centerYProperty().bind(radio.layoutYProperty().add(radio.heightProperty().divide(2)));
             ripple.getStyleClass().add("ripple");
             ripple.setMouseTransparent(true);
             radioButton.addEventFilter(ActionEvent.ACTION, event -> {
