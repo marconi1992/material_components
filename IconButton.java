@@ -13,6 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.SVGPath;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -44,9 +45,13 @@ public class IconButton extends ButtonBase {
     protected Skin<?> createDefaultSkin() {
 
         IconButtonSkin skin = new IconButtonSkin(this);
-        skin.setIcon(icon);
-        skin.setIcon(iconBackground);
-        iconBackground.setVisible(false);
+        if(icon!=null) {
+            skin.setIcon(icon);
+        }
+        if(iconBackground!=null) {
+            skin.setIcon(iconBackground);
+            iconBackground.setVisible(false);
+        }
         RippleSkinFactory.getRippleEffect(skin, this);
         return skin;
 
@@ -62,7 +67,14 @@ public class IconButton extends ButtonBase {
             e.printStackTrace();
         }
     }
+    public void setIcon(InputStream file) {
+        icon = SVGFactory.createSVG(file);
 
+    }
+    public void setIconBackground(InputStream file) {
+       iconBackground = SVGFactory.createSVG(file);
+
+    }
     public void setIconBackground(String path) {
         URL url = null;
         try {

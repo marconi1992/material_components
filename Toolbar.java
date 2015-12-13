@@ -26,8 +26,8 @@ public class Toolbar extends VBox implements ActionBar{
         topPlace.getStyleClass().add("top-place");
         title.getStyleClass().add("title");
 
-        home.setIcon(getClass().getResource("utils/icons/menu.svg").toString());
-        home.setIconBackground(getClass().getResource("utils/icons/arrow_back.svg").toString());
+        home.setIcon(getClass().getResourceAsStream("utils/icons/menu.svg"));
+        home.setIconBackground(getClass().getResourceAsStream("utils/icons/arrow_back.svg"));
 
         getChildren().add(topPlace);
     }
@@ -40,7 +40,7 @@ public class Toolbar extends VBox implements ActionBar{
     @Override
     public void setDisplayHomeAsUpEnabled(boolean showHomeAsUp) {
         homeAsUp=true;
-        home.setIcon(getClass().getResource("utils/icons/arrow_back.svg").toString());
+        home.setIcon(getClass().getResourceAsStream("utils/icons/arrow_back.svg"));
         home.setVisible(false);
         home.setManaged(false);
         if(!topPlace.getChildren().contains(home)){

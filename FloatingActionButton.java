@@ -11,6 +11,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -46,9 +49,11 @@ public class FloatingActionButton extends ButtonBase {
         URL url = null;
         try {
             url = new URL(path);
-            File file = new File(url.getFile());
+            InputStream file = new FileInputStream(url.getPath());
             icon = SVGFactory.createSVG(file);
         } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }

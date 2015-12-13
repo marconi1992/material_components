@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by Felipe on 07/09/2015.
@@ -25,25 +26,20 @@ public class SVGFactory {
         return svg;
     }
 
-    static public String getSVGContent(File file){
+    static public SVGPath createSVG(InputStream file) {
+        SVGPath svg = new SVGPath();
+        svg.getStyleClass().add("icon-svg");
+        svg.setContent(getSVGContent(file));
+        return svg;
+    }
+
+    static public String getSVGContent(InputStream file) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        String pathStr = "";
+        DocumentBuilder dbBuilder = null;
         try {
-            DocumentBuilder dbBuilder = dbFactory.newDocumentBuilder();
+            dbBuilder = dbFactory.newDocumentBuilder();
             Document doc = dbBuilder.parse(file);
-            doc.normalizeDocument();
-            NodeList paths = doc.getElementsByTagName("path");
-            for (int i = 0; i < paths.getLength(); i++) {
-                Node node = paths.item(i);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element path = (Element) node;
-
-                    if(!path.getAttribute("fill").equals("none")){
-                        pathStr += path.getAttribute("d");
-                    }
-                }
-
-            }
+            return parseToSVG(doc);
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (SAXException e) {
@@ -51,6 +47,45 @@ public class SVGFactory {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return  pathStr;
+        return null;
+    }
+
+    static public String getSVGContent(File file) {
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dbBuilder = null;
+        try {
+            dbBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dbBuilder.parse(file);
+            return parseToSVG(doc);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    static private String parseToSVG(Document doc) {
+
+        String pathStr = "";
+
+
+        doc.normalizeDocument();
+        NodeList paths = doc.getElementsByTagName("path");
+        for (int i = 0; i < paths.getLength(); i++) {
+            Node node = paths.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element path = (Element) node;
+
+                if (!path.getAttribute("fill").equals("none")) {
+                    pathStr += path.getAttribute("d");
+                }
+            }
+
+        }
+
+        return pathStr;
     }
 }
