@@ -6,6 +6,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -20,19 +22,19 @@ public class ArrayMapCellFactory implements Callback<TableColumn.CellDataFeature
     @Override
     public ObservableValue<?> call(TableColumn.CellDataFeatures<ArrayMap, ?> param) {
         String value = "";
-        String patternTemp=pattern;
+        String patternTemp = pattern;
         if (keys.size() == 0) {
-            value = param.getValue().get(this.key);
+            value = getContent(param.getValue(),key);
 
         } else {
             if (patternTemp != null) {
                 for (String key : keys) {
-                    patternTemp = patternTemp.replaceFirst("\\?", param.getValue().get(key));
+                    patternTemp = patternTemp.replaceFirst("\\?",getContent(param.getValue(),key));
                 }
                 value = patternTemp;
             } else {
                 for (int i = 0; i < keys.size(); i++) {
-                    value += param.getValue().get(keys.get(i)) + (i == keys.size() - 1 ? "" : " ");
+                    value += getContent(param.getValue(),keys.get(i)) + (i == keys.size() - 1 ? "" : " ");
                 }
             }
         }
@@ -57,5 +59,31 @@ public class ArrayMapCellFactory implements Callback<TableColumn.CellDataFeature
 
     public void setPattern(String pattern) {
         this.pattern = pattern;
+    }
+
+    private String getContent(ArrayMap item, String key) {
+        String value="";
+        ArrayMap arrayMap = item;
+        if (key.contains(".")) {
+            String keysSplit[] = key.split("\\.");
+            for (int i = 0; i < keysSplit.length; i++) {
+                value = arrayMap.get(keysSplit[i]);
+                if ((arrayMap = isArrayMap(value)) == null) {
+                  return value;
+                }
+            }
+            return value;
+        } else {
+            return item.get(key);
+        }
+    }
+
+    private ArrayMap isArrayMap(String data) {
+        try {
+            JSONObject json = new JSONObject(data);
+            return JSONUtils.toArrayMap(json);
+        } catch (JSONException e) {
+            return null;
+        }
     }
 }
